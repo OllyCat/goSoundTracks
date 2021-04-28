@@ -26,12 +26,12 @@ func main() {
 	c := &fasthttp.Client{}
 	var url string
 
-	songs := make(map[string]Song)
 	r := regexp.MustCompile(`"name": "(?P<name>.+)",.*\n.*"artist": "(?P<artist>.+)",.*\n.*"album": "(?P<album>.+)",.*\n.*"url": "(?P<url>.+)",.*`)
 
 	scanner := bufio.NewScanner(os.Stdin)
 
 	for scanner.Scan() {
+		songs := make(map[string]Song)
 		url = scanner.Text()
 		if !strings.HasPrefix(url, "http") {
 			continue
@@ -90,6 +90,7 @@ func main() {
 		if err := os.Chdir(".."); err != nil {
 			color.Red.Println("Error change dir to parrent: ", err)
 		}
+		c.CloseIdleConnections()
 	}
 }
 
